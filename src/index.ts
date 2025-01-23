@@ -1,16 +1,21 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import { applicationDefault, initializeApp } from "firebase-admin/app";
+import * as admin from "firebase-admin";
 import { getMessaging } from "firebase-admin/messaging";
 import { payloadSchema } from "./post.schema";
 
 dotenv.config();
+const credentialPath: string = process.env.GOOGLE_APPLICATION_CREDENTIALS ?? "";
+
+if (!credentialPath) {
+  throw new Error("GOOGLE_APPLICATION_CREDENTIALS is not defined in .env file");
+}
 
 const app = express();
 app.use(express.json());
 
-initializeApp({
-  credential: applicationDefault(),
+admin.initializeApp({
+  credential: admin.credential.cert(credentialPath),
 });
 
 const port = process.env.PORT || 3000;
