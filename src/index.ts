@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import * as admin from "firebase-admin";
 import { getMessaging } from "firebase-admin/messaging";
 import { payloadSchema } from "./post.schema";
+import cors from "cors";
 
 dotenv.config();
 const credentialPath: string = process.env.GOOGLE_APPLICATION_CREDENTIALS ?? "";
@@ -13,6 +14,7 @@ if (!credentialPath) {
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 admin.initializeApp({
   credential: admin.credential.cert(credentialPath),
